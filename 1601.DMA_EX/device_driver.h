@@ -82,4 +82,4 @@ extern int ADC1_Get_Data(void);
 
 extern void DMA2_Stream0_M2M_Init(void);
 extern void DMA2_Stream0_M2M_Start(void * src_addr, void * dst_addr, int num);
-extern void DMA1_Stream6_USART2_TX_Satrt(void * src_addr, int num);
+extern void DMA1_Stream6_USART2_TX_Start(void * src_addr, int num);

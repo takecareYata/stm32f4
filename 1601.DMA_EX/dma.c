@@ -19,7 +19,7 @@ void DMA2_Stream0_M2M_Start(void * src_addr, void * dst_addr, int num)
 	Macro_Set_Bit(DMA2_Stream0->CR, 0);	
 }
 
-void DMA1_Stream6_USART2_TX_Satrt(void * src_addr, int num)
+void DMA1_Stream6_USART2_TX_Start(void * src_addr, int num)
 {
 	Macro_Set_Bit(RCC->AHB1ENR, 21);
 
@@ -29,10 +29,11 @@ void DMA1_Stream6_USART2_TX_Satrt(void * src_addr, int num)
 	DMA1_Stream6->M0AR = (unsigned int)src_addr;
 	DMA1_Stream6->NDTR = num;
 	
-	DMA1->HIFCR = 0x3F << 0;
+	DMA1->HIFCR = 0x3F << 16;
 	Macro_Set_Bit(DMA1_Stream6->CR, 4);
-	NVIC_ClearPendingIRQ(15);
-	NVIC_EnableIRQ(15);
+	NVIC_ClearPendingIRQ(17);
+	NVIC_EnableIRQ(17);
 
 	Macro_Set_Bit(DMA1_Stream6->CR, 0);	
 }
+ 
