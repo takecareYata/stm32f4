@@ -31,7 +31,7 @@ volatile int DMA1_STREAM6_DONE = 0;
 
 void DMA1_Stream6_IRQHandler(void)
 {
-	DMA2->HIFCR = 0x3F << 16;
+	DMA1->HIFCR = 0x3F << 16;
 	NVIC_ClearPendingIRQ(17);
     DMA1_STREAM6_DONE = 1;
 }
