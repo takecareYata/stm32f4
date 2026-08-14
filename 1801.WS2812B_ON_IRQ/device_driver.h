@@ -44,6 +44,8 @@ extern void Key_ISR_Enable(int en);
 extern void TIM2_Delay(int time);
 extern void TIM2_Stopwatch_Start(void);
 extern unsigned int TIM2_Stopwatch_Stop(void);
+extern void TIM2_Out_Init(void);
+extern void TIM2_Out_PWM_Generation(unsigned short freq, int duty);
 extern void TIM4_Repeat(int time);
 extern int TIM4_Check_Timeout(void);
 extern void TIM4_Stop(void);
@@ -51,6 +53,7 @@ extern void TIM4_Change_Value(int time);
 extern void TIM3_Out_Init(void);
 extern void TIM3_Out_Freq_Generation(unsigned short freq);
 extern void TIM3_Out_Stop(void);
+extern void TIM3_Delay_ms(uint32_t ms);
 extern void TIM4_Repeat_Interrupt_Enable(int en, int time);
 
 // i2c.c
@@ -83,3 +86,11 @@ extern int ADC1_Get_Data(void);
 extern void DMA2_Stream0_M2M_Init(void);
 extern void DMA2_Stream0_M2M_Start(void * src_addr, void * dst_addr, int num);
 extern void DMA1_Stream6_USART2_TX_Satrt(void * src_addr, int num);
+
+
+//WS2812B
+
+extern void TIM2_WS2812_Init(void);
+extern void WS2812_Set_LED_Color(uint8_t led_index, uint8_t red, uint8_t green, uint8_t blue);
+extern void WS2812_Clear_Buffer(void);
+extern void WS2812_Send(void);

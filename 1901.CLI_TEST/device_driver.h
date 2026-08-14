@@ -6,11 +6,15 @@
 // Uart.c
 
 extern void Uart2_Init(int baud);
+extern void Uart2_Send_Byte(char data);
+extern void Uart2_RX_Interrupt_Enable(int en);
+
 extern void Uart1_Init(int baud);
 extern void Uart1_Send_Byte(char data);
+extern void Uart1_Send_String(char *pt);
+extern void Uart1_Printf(char *fmt,...);
 extern char Uart1_Get_Char(void);
 extern char Uart1_Get_Pressed(void);
-extern void Uart2_RX_Interrupt_Enable(int en);
 
 // SysTick.c
 
@@ -25,8 +29,8 @@ extern void SysTick_Stop(void);
 extern void LED_Init(void);
 extern void LED_On(void);
 extern void LED_Off(void);
-extern void LED_Display(int on);
-
+extern void LED_Toggle(void);
+extern int led_toggle_flag;
 // Clock.c
 
 extern void Clock_Init(void);
@@ -48,38 +52,34 @@ extern void TIM4_Repeat(int time);
 extern int TIM4_Check_Timeout(void);
 extern void TIM4_Stop(void);
 extern void TIM4_Change_Value(int time);
+extern void TIM4_Repeat_Interrupt_Enable(int en, int time);
 extern void TIM3_Out_Init(void);
 extern void TIM3_Out_Freq_Generation(unsigned short freq);
 extern void TIM3_Out_Stop(void);
-extern void TIM4_Repeat_Interrupt_Enable(int en, int time);
 
-// i2c.c
+// que.c
 
-#define SC16IS752_IODIR				0x0A
-#define SC16IS752_IOSTATE			0x0B
+#define RING_BUF_SIZE 128 // 원형 큐 크기
 
-extern void I2C1_SC16IS752_Init(unsigned int freq);
-extern void I2C1_SC16IS752_Write_Reg(unsigned int addr, unsigned int data);
-extern void I2C1_SC16IS752_Config_GPIO(unsigned int config);
-extern void I2C1_SC16IS752_Write_GPIO(unsigned int data);
+extern void RingBuf_Init(void);
+extern int RingBuf_IsFull(void);
+extern int RingBuf_IsEmpty(void);
+extern int RingBuf_Put(char c);
+extern int RingBuf_Get(char *c);
 
-// spi.c
+// cli.c
+#define LINE_BUF_SIZE 64  // 명령어 1줄 버퍼 크기
+#define MAX_ARGC      8   // 인자 최대 개수
 
-extern void SPI1_SC16IS752_Init(unsigned int div);
-extern void SPI1_SC16IS752_Write_Reg(unsigned int addr, unsigned int data);
-extern void SPI1_SC16IS752_Config_GPIO(unsigned int config);
-extern void SPI1_SC16IS752_Write_GPIO(unsigned int data);
+extern void Process_CLI_Line(char *line);
 
-// Adc.c
+// servo.c
+extern void Servo_Init(void);
+extern void Servo_SetAngle(int angle);
+extern void Servo_Set90(void);
+extern void Servo_Set0(void);
 
-extern void ADC1_IN6_Init(void);
-extern void ADC1_Start(void);
-extern void ADC1_Stop(void);
-extern int ADC1_Get_Status(void);
-extern int ADC1_Get_Data(void);
-
-// DMA
-
-extern void DMA2_Stream0_M2M_Init(void);
-extern void DMA2_Stream0_M2M_Start(void * src_addr, void * dst_addr, int num);
-extern void DMA1_Stream6_USART2_TX_Satrt(void * src_addr, int num);
+//color_check.c
+extern void Check_Blue(void);
+extern void Check_Red(void);
+extern void Check_Stop(void);
