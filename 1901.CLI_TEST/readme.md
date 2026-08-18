@@ -75,11 +75,53 @@
 
 ### 3.1 흐름 A — 비전 기반 자동 제어
 
-![비전 기반 자동 제어 시퀀스 다이어그램](./sq1.png)
+```mermaid
+sequenceDiagram
+    participant C as Camera
+    participant Q as Qt processFrame()
+    participant S as Qt SerialManager
+    participant MCU as STM32 RingBuffer
+    participant CLI as STM32 Process_CLI_Line
+
+    loop 33ms (30 FPS)
+        C->>Q: cv::Mat Frame 획득
+        Q->>Q: BGR → HSV 변환 & InRange Masking
+        Q->>Q: Morphology (OPEN) & findContours
+        alt Blue 감지 (Area > 2000)
+            Q->>S: sendLedCommand(true) -> "check blue\n"
+        else Red 감지 (Area > 2000)
+            Q->>S: sendLedCommand(false) -> "check red\n"
+        end
+        S->>MCU: UART Tx
+        MCU->>MCU: UART RX ISR -> RingBuf_Put()
+        MCU->>CLI: RingBuf_Get() -> 라인 수집 ('\n') -> Process_CLI_Line()
+    end
+```
 
 ### 3.2 흐름 B — 하드웨어 인터럽트 및 타이머 제어
 
-![하드웨어 인터럽트 및 타이머 제어 시퀀스 다이어그램](./sq2.png)
+```mermaid
+sequenceDiagram
+    participant Key as External Key
+    participant ISR as STM32 ISR
+    participant Main as STM32 Main Loop
+    participant Servo as Servo Motor
+    participant TIM4 as Timer4 (200ms)
+    participant LED as LED Actuator
+
+    alt Key Interrupt
+        Key->>ISR: Button Press Event
+        ISR->>Main: Key_Pressed = 1
+        Main->>Servo: Servo_SetAngle(0)
+        Main->>Main: led_toggle_flag = 1, Key_Pressed = 0
+    else TIM4 Expiration
+        TIM4->>Main: TIM4_Expired = 1
+        alt led_toggle_flag == 1
+            Main->>LED: LED_Toggle()
+            Main->>Main: TIM4_Expired = 0
+        end
+    end
+```
 
 ---
 

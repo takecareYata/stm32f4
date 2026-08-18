@@ -37,11 +37,9 @@ static const Cmd_t check_cmd_table[] = {
 // LED 도움말 출력
 static void Show_Led_Help(void) 
 {
-    printf("\n=== [LED Control Commands] ===\n");
     for (int i = 0; i < LED_CMD_COUNT; i++) {
         printf("  led %-8s : %s\n", led_cmd_table[i].cmd, led_cmd_table[i].desc);
     }
-    printf("==============================\n\n");
 }
 
 // LED 명령어 핸들러
@@ -66,11 +64,9 @@ static void Cmd_Led(int argc, char *argv[])
 
 static void Show_Servo_Help(void) 
 {
-    printf("\n=== [servo Control Commands] ===\n");
     for (int i = 0; i < SERVO_CMD_COUNT; i++) {
         printf("  servo %-8s : %s\n", servo_cmd_table[i].cmd, servo_cmd_table[i].desc);
     }
-    printf("==============================\n\n");
 }
 
 // Servo 명령어 핸들러
@@ -94,11 +90,9 @@ static void Cmd_Servo(int argc, char *argv[])
 
 static void Show_Check_Help(void) 
 {
-    printf("\n=== [Check Color Commands] ===\n");
     for (int i = 0; i < CHECK_CMD_COUNT; i++) {
         printf("  check %-8s : %s\n", check_cmd_table[i].cmd, check_cmd_table[i].desc);
     }
-    printf("==============================\n\n");
 }
 
 // Servo 명령어 핸들러
@@ -119,6 +113,13 @@ static void Cmd_Check(int argc, char *argv[])
     }
 
     printf("[CLI] Unknown option '%s'. Type 'check' for help.\n", argv[1]);
+}
+
+static void Cmd_Help(void) 
+{
+    Show_Led_Help();
+    Show_Servo_Help();
+    Show_Check_Help();
 }
 
 // 최상위 CLI 라인 파서
@@ -146,6 +147,10 @@ void Process_CLI_Line(char *line)
     else if (strcmp(argv[0], "check") == 0)
     {
         Cmd_Check(argc,argv);
+    }
+    else if (strcmp(argv[0], "help") == 0 || strcmp(argv[0], "?") == 0)
+    {
+        Cmd_Help();
     }
     else 
     {
