@@ -17,8 +17,11 @@ void Servo_Init(void)
 
     // 3. TIM3 PWM 설정 (50Hz = 20ms 주기)
     // APB1 Timer Clock = 84MHz 기준
-    TIM3->PSC = 84 - 1;          // 1MHz 카운터 클록 (1us 틱)
-    TIM3->ARR = 20000 - 1;       // 20,000us = 20ms (50Hz 주기)
+    //TIM3->PSC = 84 - 1;          // 1MHz 카운터 클록 (1us 틱)
+    //TIM3->ARR = 20000 - 1;       // 20,000us = 20ms (50Hz 주기)
+    // TIM3 설정 변경
+    TIM3->PSC = 96 - 1;      // 96MHz / 96 = 1MHz (1us 틱)
+    TIM3->ARR = 20000 - 1;   // 20,000us = 20ms (정확히 50Hz)
 
     // 4. TIM3 Channel 1 PWM Mode 1 설정
     TIM3->CCMR1 &= ~(0x7 << 4);
